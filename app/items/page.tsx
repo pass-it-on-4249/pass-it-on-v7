@@ -44,18 +44,18 @@ export default function ItemList() {
   }
 
   const styles = {
-      container: {
-        marginTop: 40,
-        marginLeft: 580,
-        padding: 0,
-        width: '45vw',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, 260px)',
-        gridAutoRows: '10px',
-        position: 'relative' as 'relative',
-        justifyContent: 'center',
-      }
-  }
+    container: {
+      marginTop: 40,
+      marginLeft: 290,
+      padding: 0,
+      width: '60vw',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, 260px)',
+      gridAutoRows: '10px',
+      position: 'relative' as 'relative',
+      justifyContent: 'center',
+    }
+}
 
   function getCardSize(index: number): 'small' | 'medium' | 'large' {
       // Define the sizes in the sequence: small, medium, large
