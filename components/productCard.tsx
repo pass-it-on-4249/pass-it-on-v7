@@ -72,7 +72,8 @@ function ProductCard({ product, cardSize }: ProductCardProps) {
           {product.id}
         </p>
         <div className="mb-2">
-          <button 
+          <button
+            id="addToCart-icon-button"
             className={`absolute top-9 right-3 focus:outline-none ${
               isClicked ? 'clicked' : ''
             }`}
