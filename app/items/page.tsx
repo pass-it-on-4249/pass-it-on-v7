@@ -3,7 +3,6 @@
 import Image from "next/image";
 import React from "react";
 import { useState } from "react";
-
 import PageNav from "@/components/pageNav";
 import ProductCard from "@/components/productCard";
 import ProductCardStaggered from "@/components/productCardStaggered";
@@ -42,6 +41,28 @@ export default function ItemList() {
     } else {
       noItemsFound.style.display = "none";
     }
+  }
+
+  const styles = {
+      container: {
+        marginTop: 40,
+        marginLeft: 580,
+        padding: 0,
+        width: '45vw',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, 260px)',
+        gridAutoRows: '10px',
+        position: 'relative' as 'relative',
+        justifyContent: 'center',
+      }
+  }
+
+  function getCardSize(index: number): 'small' | 'medium' | 'large' {
+      // Define the sizes in the sequence: small, medium, large
+      const sizes: ('small' | 'medium' | 'large')[] = ['small', 'medium', 'large', 'small'];
+
+      // Return the size based on the index using modular arithmetic
+      return sizes[index % sizes.length];
   }
 
   return (
@@ -149,16 +170,12 @@ export default function ItemList() {
         </div>
       </div>
 
-      <div className="flex flex-row justify-center items-center mt-7">
-        <div className="grid grid-cols-3 gap-8">
-          {data.map((product, index) => (
-            <React.Fragment key={product.id}>
-              <ProductCard product={product} />
-            </React.Fragment>
-          ))}
-        </div>
+      <div style={styles.container}>
+        {data.map((product, index) => (
+            <ProductCard key={product.id} product={product} cardSize={getCardSize(index)} />
+        ))}
       </div>
-
+      
       {/* Shows up when filtered data's length is zero */}
       <div className="flex flex-col items-center mr-57 ml-4"> 
           <h2 id="no-items-found-text" className="text-sm font-semibold mb-1 text-[#FFFFFF]">
@@ -167,5 +184,3 @@ export default function ItemList() {
     </main>    
   );
 }
-
-// grid-cols-4 gap-2

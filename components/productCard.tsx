@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PlusCircleIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Product {
   id: string;
@@ -15,12 +16,13 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
+  cardSize: 'small' | 'medium' | 'large';
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+function ProductCard({ product, cardSize }: ProductCardProps) {
   const truncatedDescription =
-    product.description.length > 170
-      ? `${product.description.slice(0, 170)}...`
+    product.description.length > 70
+      ? `${product.description.slice(0, 70)}...`
       : product.description;
 
   const formattedLocation = product.location.join(', ');
@@ -39,37 +41,64 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  // Modular Product Card
+  let height: number;
+
+  if (cardSize === 'small') {
+    height = 150;
+  } else if (cardSize === 'medium') {
+    height = 200;
+  } else {
+    height = 300;
+  }
+
+  const cardStyles = {
+    small: {
+      gridRowEnd: 'span 35'
+    },
+    medium: {
+      gridRowEnd: 'span 42'
+    },
+    large: {
+      gridRowEnd: 'span 50'
+    }
+  };
+
   return (
-    <div className="relative w-60 border border-gray-200 rounded-lg shadow-sm p-4">
-      <p className="text-sm text-gray-600 mb-2 font-semibold">{product.id}</p>
+    <div 
+      className="border border-gray-200 rounded-lg shadow-sm p-4 mb-4 mx-2"
+      style={{ ...cardStyles[cardSize], width: '100% -2px' }}>  {/* -2 to give left right padding */}
       <div className="relative">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-64 object-cover mb-2 rounded-2xl"
-          style={{ maxWidth: '205px', maxHeight: '205px' }}
-        />
-        <button 
-          className={`absolute top-3 right-3 focus:outline-none ${
-            isClicked ? 'clicked' : ''
-          }`}
-          onClick={handleAddToCartClick}
-          >
-          {isIconPlus ? (
-            <PlusCircleIcon id="addToCart-button" className='h-10 w-10' fill='#e0e0de'/>
-          ) : (
-            <CheckCircleIcon id="removeFromCart-button" className='h-10 w-10' fill='#2BA41D' />
-          )}
-        </button>
+        <p className="text-sm text-gray-600 mb-2 font-semibold">
+          {product.id}
+        </p>
+        <div className="mb-2">
+          <button 
+            className={`absolute top-9 right-3 focus:outline-none ${
+              isClicked ? 'clicked' : ''
+            }`}
+            onClick={handleAddToCartClick}
+            >
+            {isIconPlus ? (
+              <PlusCircleIcon id="addToCart-button" className='h-10 w-10' fill='#e0e0de'/>
+            ) : (
+              <CheckCircleIcon id="removeFromCart-button" className='h-10 w-10' fill='#2BA41D' />
+            )}
+          </button>
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full object-cover rounded-2xl"
+            style={{ height: height, objectFit: 'cover' }} 
+          />
+        </div>
+        <h2 className="text-sm font-semibold mb-0.2">{product.title}</h2>
+        <p className="text-[0.7em] text-gray-600 mb-2">{truncatedDescription}</p>
       </div>
-      <h2 className="text-sm font-semibold mb-1">{product.title}</h2>
-      <p className="text-[0.7em] text-gray-600 mb-2">{truncatedDescription}</p>
-      <div className="flex flex-wrap">
-        <div className="w-3/4 pr-2 border-r border-gray-200">
+      <div className="flex justify-between items-center">
+        <div>
           <p className="text-[0.6em] text-gray-600">{formattedLocation}</p>
         </div>
-        <div className="w-1/4">
+        <div>
           <p className="text-[0.6em] text-green-400 ml-2">
             {product.delivery ? 'Delivery Covered' : 'Delivery Not Covered'}
           </p>
@@ -82,6 +111,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       `}</style>
     </div>
   );
-};
+}
+
 
 export default ProductCard;
